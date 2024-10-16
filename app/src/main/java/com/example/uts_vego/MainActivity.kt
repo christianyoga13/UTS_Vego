@@ -1,5 +1,6 @@
 package com.example.uts_vego
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
@@ -52,7 +53,9 @@ class MainActivity : AppCompatActivity() {
 
         // Register Now Action
         registerNow.setOnClickListener {
-            Toast.makeText(this, "Navigate to Register page", Toast.LENGTH_SHORT).show()
+            // Navigate to the SignUpActivity when "Register Now" is clicked
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
         }
 
         // Forgot Password Action
