@@ -3,13 +3,17 @@
     <item
         android:id="@+id/nav_home"
         android:title="Home"
-        android:icon="@android:drawable/ic_menu_view" /> <!-- Example built-in icon -->
+        android:icon="@android:drawable/ic_menu_view" /> <!-- Use built-in icon -->
     <item
-        android:id="@+id/nav_favorites"
-        android:title="Favorites"
-        android:icon="@android:drawable/ic_menu_star" /> <!-- Example built-in icon -->
+        android:id="@+id/nav_promo"
+        android:title="Promo"
+        android:icon="@android:drawable/ic_menu_info_details" /> <!-- Use built-in icon -->
+    <item
+        android:id="@+id/nav_payment"
+        android:title="Payment"
+        android:icon="@android:drawable/ic_menu_add" /> <!-- Use built-in icon -->
     <item
         android:id="@+id/nav_profile"
         android:title="Profile"
-        android:icon="@android:drawable/ic_menu_myplaces" /> <!-- Example built-in icon -->
+        android:icon="@android:drawable/ic_menu_myplaces" /> <!-- Use built-in icon -->
 </menu>

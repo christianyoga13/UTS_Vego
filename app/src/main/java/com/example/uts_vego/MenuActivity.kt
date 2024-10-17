@@ -17,8 +17,12 @@ class MenuActivity : AppCompatActivity() {
                     // Handle home action
                     true
                 }
-                R.id.nav_favorites -> {
-                    // Handle favorites action
+                R.id.nav_promo -> {
+                    // Handle promo action
+                    true
+                }
+                R.id.nav_payment -> {
+                    // Handle payment action
                     true
                 }
                 R.id.nav_profile -> {
