@@ -7,6 +7,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -16,10 +17,14 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var passwordInputLayout: TextInputLayout
     private lateinit var signUpButton: Button
     private lateinit var alreadyHaveAccountTextView: TextView
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+
+        // Initialize Firebase Auth
+        auth = FirebaseAuth.getInstance()
 
         // Initialize Views
         nameInputLayout = findViewById(R.id.nameInputLayout)
@@ -49,8 +54,21 @@ class SignUpActivity : AppCompatActivity() {
         if (name.isEmpty() || email.isEmpty() || number.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
         } else {
-            // Add your sign-up logic here, such as storing the data or communicating with Firebase
-            Toast.makeText(this, "Sign Up Successful", Toast.LENGTH_SHORT).show()
+            // Firebase sign-up logic
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Registration success
+                        Toast.makeText(this, "Sign Up Successful", Toast.LENGTH_SHORT).show()
+                        // Navigate to MainActivity (Login screen) or MenuActivity
+                        val intent = Intent(this, MenuActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        // If sign-up fails, display a message to the user
+                        Toast.makeText(this, "Sign Up failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                    }
+                }
         }
     }
 }

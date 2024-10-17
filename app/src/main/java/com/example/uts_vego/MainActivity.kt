@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,10 +21,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var registerNow: TextView
     private lateinit var forgotPassword: TextView
     private lateinit var rememberMeCheckBox: CheckBox
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Initialize Firebase Auth
+        auth = FirebaseAuth.getInstance()
 
         // Initialize the views using findViewById
         emailEditText = findViewById(R.id.emailEditText)
@@ -42,11 +47,23 @@ class MainActivity : AppCompatActivity() {
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please enter all fields", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Logging in...", Toast.LENGTH_SHORT).show()
+                // Firebase sign-in logic
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, navigate to the MenuActivity or next screen
+                            val intent = Intent(this, MenuActivity::class.java)
+                            startActivity(intent)
+                            finish() // Close this activity
+                        } else {
+                            // If sign-in fails, display a message to the user
+                            Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                        }
+                    }
             }
         }
 
-        // Google Sign-In Button Action
+        // Google Sign-In Button Action (Not implemented yet)
         googleSignInButton.setOnClickListener {
             Snackbar.make(it, "Google Sign-In not implemented yet", Snackbar.LENGTH_SHORT).show()
         }
