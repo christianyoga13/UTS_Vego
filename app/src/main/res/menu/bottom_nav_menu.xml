@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_home"
+        android:id="@+id/menu_home"
         android:title="Home"
         android:icon="@android:drawable/ic_menu_view" /> <!-- Use built-in icon -->
     <item
-        android:id="@+id/nav_promo"
+        android:id="@+id/menu_promo"
         android:title="Promo"
         android:icon="@android:drawable/ic_menu_info_details" /> <!-- Use built-in icon -->
     <item
-        android:id="@+id/nav_payment"
+        android:id="@+id/menu_payment"
         android:title="Payment"
         android:icon="@android:drawable/ic_menu_add" /> <!-- Use built-in icon -->
     <item
-        android:id="@+id/nav_profile"
+        android:id="@+id/menu_profile"
         android:title="Profile"
         android:icon="@android:drawable/ic_menu_myplaces" /> <!-- Use built-in icon -->
 </menu>

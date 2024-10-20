@@ -4,4 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FFB001</color>
     <color name="red">#FF0000</color>
+    <color name="orange">#FFA500</color>
+    <color name="colorSelected">#FF0000</color> <!-- Warna saat terpilih, misalnya merah -->
+    <color name="colorUnselected">#808080</color>
 </resources>

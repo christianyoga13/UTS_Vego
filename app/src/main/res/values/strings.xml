@@ -1,4 +1,14 @@
 <resources>
-    <string name="app_name">UTS_Vego</string>
+    <string name="app_name">Vego</string>
+    <string name="home">Home</string>
+    <string name="promo">Promo</string>
+    <string name="payment">Payment</string>
+    <string name="profile">Profile</string>
+    <string name="search">Search</string>
+    <string name="online_order">Online Order</string>
+    <string name="restaurant">Restaurant</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="image_slider_description">Image Slider displaying promotional banners</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="carousel_image">gambar</string>
 </resources>

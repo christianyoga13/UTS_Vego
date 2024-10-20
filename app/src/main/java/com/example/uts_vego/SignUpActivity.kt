@@ -23,10 +23,8 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
-        // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance()
 
-        // Initialize Views
         nameInputLayout = findViewById(R.id.nameInputLayout)
         emailInputLayout = findViewById(R.id.emailInputLayout)
         numberInputLayout = findViewById(R.id.numberInputLayout)
@@ -39,7 +37,6 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         alreadyHaveAccountTextView.setOnClickListener {
-            // Handle navigation to MainActivity (Login screen)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
@@ -54,18 +51,14 @@ class SignUpActivity : AppCompatActivity() {
         if (name.isEmpty() || email.isEmpty() || number.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
         } else {
-            // Firebase sign-up logic
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // Registration success
                         Toast.makeText(this, "Sign Up Successful", Toast.LENGTH_SHORT).show()
-                        // Navigate to MainActivity (Login screen) or MenuActivity
-                        val intent = Intent(this, MenuActivity::class.java)
+                        val intent = Intent(this, HomeScreen::class.java)
                         startActivity(intent)
                         finish()
                     } else {
-                        // If sign-up fails, display a message to the user
                         Toast.makeText(this, "Sign Up failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                     }
                 }

@@ -14,4 +14,3 @@ class DetailActivity : AppCompatActivity() {
 
         }
     }
-}
