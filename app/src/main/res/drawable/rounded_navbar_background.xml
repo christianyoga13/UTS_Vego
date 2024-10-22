@@ -1,0 +1,21 @@
+<shape xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:ignore="ExtraText">
+    <!-- Solid color inside the shape -->
+    <solid android:color="@color/orange" />
+
+    <!-- Rounded corners, adjust the radius as needed -->
+    <corners android:radius="16dp" />
+
+    <!-- Stroke for the border -->
+    <stroke
+        android:width="2dp"
+        android:color="@color/orange" /> <!-- Border color -->
+
+    <!-- Padding inside the layout -->
+    <padding
+        android:left="0dp"
+        android:top="0dp"
+        android:right="0dp"
+        android:bottom="0dp" />
+</shape>

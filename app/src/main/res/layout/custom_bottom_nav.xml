@@ -1,15 +1,20 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/custom_bottom_nav"
     android:layout_width="match_parent"
     android:layout_height="56dp"
+    android:baselineAligned="false"
     android:orientation="horizontal"
-    android:background="@color/orange"
+    android:background="@drawable/rounded_navbar_background"
     android:gravity="center"
     android:elevation="8dp"
-    android:padding="4dp">
+    android:padding="4dp"
+    android:clipToPadding="false">
 
+
+<!-- Updated nav_home with more space between icon and text -->
     <LinearLayout
         android:id="@+id/nav_home"
         android:layout_width="0dp"
@@ -22,7 +27,8 @@
         android:foreground="?attr/selectableItemBackground"
         android:padding="8dp"
         android:minHeight="48dp"
-        android:minWidth="48dp">
+        android:minWidth="48dp"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/icon_home"
@@ -30,7 +36,8 @@
             android:layout_height="28dp"
             android:src="@android:drawable/ic_menu_view"
             android:contentDescription="@string/home"
-            app:tint="@color/colorUnselected" />
+            app:tint="@color/colorUnselected"
+            android:layout_marginBottom="4dp" /> <!-- Adds gap between icon and text -->
 
         <TextView
             android:id="@+id/text_home"
@@ -39,10 +46,11 @@
             android:text="Home"
             android:textSize="14sp"
             android:textColor="@color/colorUnselected"
-            android:gravity="center" />
+            android:gravity="center"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
-    <!-- Item 2: Promo -->
+    <!-- Promo Layout -->
     <LinearLayout
         android:id="@+id/nav_promo"
         android:layout_width="0dp"
@@ -55,7 +63,8 @@
         android:foreground="?attr/selectableItemBackground"
         android:padding="8dp"
         android:minHeight="48dp"
-        android:minWidth="48dp">
+        android:minWidth="48dp"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/icon_promo"
@@ -63,7 +72,8 @@
             android:layout_height="28dp"
             android:src="@android:drawable/ic_menu_info_details"
             android:contentDescription="@string/promo"
-            app:tint="@color/colorUnselected" />
+            app:tint="@color/colorUnselected"
+            android:layout_marginBottom="4dp" /> <!-- Adds gap between icon and text -->
 
         <TextView
             android:id="@+id/text_promo"
@@ -72,10 +82,11 @@
             android:text="Promo"
             android:textSize="14sp"
             android:textColor="@color/colorUnselected"
-            android:gravity="center" />
+            android:gravity="center"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
-    <!-- Item 3: Payment -->
+    <!-- Payment Layout -->
     <LinearLayout
         android:id="@+id/nav_payment"
         android:layout_width="0dp"
@@ -96,7 +107,8 @@
             android:layout_height="28dp"
             android:src="@android:drawable/ic_menu_add"
             android:contentDescription="@string/payment"
-            app:tint="@color/colorUnselected" />
+            app:tint="@color/colorUnselected"
+            android:layout_marginBottom="4dp" /> <!-- Adds gap between icon and text -->
 
         <TextView
             android:id="@+id/text_payment"
@@ -108,7 +120,7 @@
             android:gravity="center" />
     </LinearLayout>
 
-    <!-- Item 4: Profile -->
+    <!-- Profile Layout -->
     <LinearLayout
         android:id="@+id/nav_profile"
         android:layout_width="0dp"
@@ -129,7 +141,8 @@
             android:layout_height="28dp"
             android:src="@android:drawable/ic_menu_myplaces"
             android:contentDescription="@string/profile"
-            app:tint="@color/colorUnselected" />
+            app:tint="@color/colorUnselected"
+            android:layout_marginBottom="4dp" /> <!-- Adds gap between icon and text -->
 
         <TextView
             android:id="@+id/text_profile"
