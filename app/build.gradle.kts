@@ -63,4 +63,5 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth:21.1.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation ("org.osmdroid:osmdroid-android:6.1.10")
 }
