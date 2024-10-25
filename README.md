@@ -12,5 +12,6 @@ KELOMPOK
 
 Fitur-fitur
 - Login, Signin
-- 
+- UI
+- Profile
 
