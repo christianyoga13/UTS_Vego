@@ -5,13 +5,13 @@ Vego adalah aplikasi yang memudahkan vegan dan vegetarian menjalani gaya hidup s
 Vego adalah teman setia untuk hidup lebih sehat dan ramah lingkungan.
 
 KELOMPOK
-- Christian Yoga
-- Edward Ferdinand
-- Putra
-- Reynard
+- Christian Yoga Shandy Kurniadi (00000067471)
+- Edward Ferdinand (00000066779)
+- Adhika Rizki Putra (00000073941)
+- Reynard . (00000067065)
 
-Fitur-fitur
-- Login, Signin
+Fitur-fitur yang sudah diimplementasikan
+- Login, Sign In
 - UI
 - Profile
 
