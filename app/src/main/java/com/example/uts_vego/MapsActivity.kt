@@ -1,11 +1,9 @@
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.uts_vego.R
 import org.osmdroid.config.Configuration
-import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.util.GeoPoint
 
 class MapsActivity : AppCompatActivity() {
     private lateinit var map: MapView
@@ -14,7 +12,7 @@ class MapsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
-        // Set konfigurasi OSM
+        // Konfigurasi OSM
         Configuration.getInstance().userAgentValue = packageName
 
         // Inisialisasi MapView
@@ -26,31 +24,31 @@ class MapsActivity : AppCompatActivity() {
         mapController.setZoom(15.0)
         mapController.setCenter(GeoPoint(-6.2088, 106.8456)) // Jakarta sebagai contoh
 
-        // Tambahkan marker
+        // Tambahkan marker untuk lokasi pilihan
         val startPoint = GeoPoint(-6.2088, 106.8456)
         val startMarker = Marker(map)
         startMarker.position = startPoint
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-        startMarker.title = "Posisi Saya"
+        startMarker.title = "Lokasi Saya"
         map.overlays.add(startMarker)
 
-        // Jika menggunakan savedInstanceState
-        map.onCreate(savedInstanceState)
-    }
+        // Mendengarkan klik pada peta untuk menambah marker
+        map.setOnMapClickListener { geoPoint ->
+            // Hapus marker sebelumnya jika ada
+            map.overlays.clear()
 
-    // Pastikan untuk memanggil metode siklus hidup MapView
-    override fun onResume() {
-        super.onResume()
-        map.onResume()
-    }
+            // Tambahkan marker baru di lokasi yang diklik
+            val newMarker = Marker(map)
+            newMarker.position = geoPoint
+            newMarker.title = "Lokasi Pengiriman"
+            map.overlays.add(newMarker)
 
-    override fun onPause() {
-        super.onPause()
-        map.onPause()
-    }
+            // Menampilkan informasi lokasi
+            val latitude = geoPoint.latitude
+            val longitude = geoPoint.longitude
 
-    override fun onDestroy() {
-        super.onDestroy()
-        map.onDetach()
+            // Tampilkan dialog atau informasi lain
+            showOrderDialog(latitude, longitude)
+        }
+
     }
 }
