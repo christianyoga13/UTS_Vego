@@ -51,11 +51,10 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation ("androidx.cardview:cardview:1.0.0")
     implementation ("com.google.android.material:material:1.8.0")
     implementation("androidx.activity:activity-ktx:1.6.1")
     implementation("androidx.fragment:fragment-ktx:1.5.5")
@@ -63,5 +62,4 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth:21.1.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
-    implementation ("org.osmdroid:osmdroid-android:6.1.10")
 }

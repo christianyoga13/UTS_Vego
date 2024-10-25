@@ -1,5 +1,6 @@
 package com.example.uts_vego
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -26,31 +27,39 @@ class HomeScreen : AppCompatActivity() {
         tabIndicator = findViewById(R.id.tabIndicator)
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
 
-        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
+        // Set up the toolbar
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-
+        // Set up the carousel
         carouselAdapter = CarouselAdapter(this, getCarouselItems())
         viewPager.adapter = carouselAdapter
 
         TabLayoutMediator(tabIndicator, viewPager) { tab, position ->
+            // Optionally set tab titles
         }.attach()
 
+        // Handle BottomNavigationView item selection
         bottomNavigationView.setOnItemSelectedListener { item ->
             when(item.itemId){
                 R.id.menu_home -> {
+                    // If already on Home, you might want to refresh or do nothing
                     true
                 }
                 R.id.menu_payment -> {
+                    // Navigate to Payment Activity or Fragment
                     Toast.makeText(this, "Payment clicked", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.menu_promo -> {
+                    // Navigate to Promo Activity or Fragment
                     Toast.makeText(this, "Promo clicked", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.menu_profile -> {
-                    Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
+                    // Navigate to Profile Activity
+                    val intent = Intent(this, Profile::class.java)
+                    startActivity(intent)
                     true
                 }
                 else -> false

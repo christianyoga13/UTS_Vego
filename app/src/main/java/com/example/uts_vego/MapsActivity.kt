@@ -1,55 +1,56 @@
-import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import com.example.uts_vego.R
-import org.osmdroid.config.Configuration
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Marker
-import org.osmdroid.util.GeoPoint
+package com.example.uts_vego
 
-class MapsActivity : AppCompatActivity(), View.OnTouchListener {
-    private lateinit var map: MapView
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.example.uts_vego.databinding.ActivityMapsBinding
+
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+
+    private lateinit var mMap: GoogleMap
+    private lateinit var binding: ActivityMapsBinding
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps)
 
-        // Konfigurasi OSM
-        Configuration.getInstance().userAgentValue = packageName
+        binding = ActivityMapsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Inisialisasi MapView
-        map = findViewById(R.id.map)
-        map.setMultiTouchControls(true)
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
-        // Atur posisi dan zoom peta
-        val mapController = map.controller
-        mapController.setZoom(15.0)
-        mapController.setCenter(GeoPoint(-6.2088, 106.8456)) // Jakarta sebagai contoh
 
-        // Tambahkan marker untuk lokasi pilihan
-        val startPoint = GeoPoint(-6.2088, 106.8456)
-        val startMarker = Marker(map)
-        startMarker.position = startPoint
-        startMarker.title = "Lokasi Saya"
-        map.overlays.add(startMarker)
-
-        // Menambahkan Listener untuk Klik pada Peta
-        map.setOnTouchListener(this) // Menggunakan this karena MapsActivity mengimplementasikan OnTouchListener
     }
 
-    override fun onTouch(view: View, event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            // Mengonversi IGeoPoint ke GeoPoint
-            val geoPoint = GeoPoint(map.projection.fromPixels(event.x.toInt(), event.y.toInt()))
-            // Lakukan sesuatu dengan geoPoint, seperti menambahkan marker
-            val newMarker = Marker(map)
-            newMarker.position = geoPoint
-            newMarker.title = "Marker Baru"
-            map.overlays.add(newMarker)
-            map.invalidate() // Untuk menyegarkan tampilan peta
-            return true // Mengindikasikan bahwa sentuhan telah diproses
-        }
-        return false
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        // Add a marker in Sydney and move the camera
+        val sydney = LatLng(-34.0, 151.0)
+        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        Log.d("MapsActivity", "getLastLocation() called.")
     }
 }
