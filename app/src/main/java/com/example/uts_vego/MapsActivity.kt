@@ -1,11 +1,14 @@
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.example.uts_vego.R
 import org.osmdroid.config.Configuration
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.util.GeoPoint
 
-class MapsActivity : AppCompatActivity() {
+class MapsActivity : AppCompatActivity(), View.OnTouchListener {
     private lateinit var map: MapView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,24 +34,22 @@ class MapsActivity : AppCompatActivity() {
         startMarker.title = "Lokasi Saya"
         map.overlays.add(startMarker)
 
-        // Mendengarkan klik pada peta untuk menambah marker
-        map.setOnMapClickListener { geoPoint ->
-            // Hapus marker sebelumnya jika ada
-            map.overlays.clear()
+        // Menambahkan Listener untuk Klik pada Peta
+        map.setOnTouchListener(this) // Menggunakan this karena MapsActivity mengimplementasikan OnTouchListener
+    }
 
-            // Tambahkan marker baru di lokasi yang diklik
+    override fun onTouch(view: View, event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            // Mengonversi IGeoPoint ke GeoPoint
+            val geoPoint = GeoPoint(map.projection.fromPixels(event.x.toInt(), event.y.toInt()))
+            // Lakukan sesuatu dengan geoPoint, seperti menambahkan marker
             val newMarker = Marker(map)
             newMarker.position = geoPoint
-            newMarker.title = "Lokasi Pengiriman"
+            newMarker.title = "Marker Baru"
             map.overlays.add(newMarker)
-
-            // Menampilkan informasi lokasi
-            val latitude = geoPoint.latitude
-            val longitude = geoPoint.longitude
-
-            // Tampilkan dialog atau informasi lain
-            showOrderDialog(latitude, longitude)
+            map.invalidate() // Untuk menyegarkan tampilan peta
+            return true // Mengindikasikan bahwa sentuhan telah diproses
         }
-
+        return false
     }
 }
