@@ -15,3 +15,5 @@ Fitur-fitur yang sudah diimplementasikan
 - UI
 - Profile
 
+Screen Record Penjelasan
+https://drive.google.com/file/d/1wmvka4pQns379BgdNUQUAtNaGF72GL5o/view?usp=sharing
