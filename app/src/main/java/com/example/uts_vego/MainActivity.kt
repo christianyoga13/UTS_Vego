@@ -9,7 +9,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.*
+import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -71,6 +73,24 @@ fun MainAppNavigation() {
             composable("onlineOrder") {
                 OnlineOrderScreen(navController)
             }
+            composable(
+                route = "restoDetail/{name}",
+                arguments = listOf(navArgument("name") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val restoName = backStackEntry.arguments?.getString("name") ?: ""
+
+                // Gabungkan semua data dari berbagai fungsi
+                val allItems = getRestoItems() + getFastServeItems() + getBigDiscountItems()
+
+                val restoItem = allItems.find { it.name == restoName }
+
+                if (restoItem != null) {
+                    RestoDetailScreen(navController = navController, restoItem = restoItem)
+                } else {
+                    Text("Resto not found") // Handle jika tidak ada data
+                }
+            }
+
         }
     }
 }

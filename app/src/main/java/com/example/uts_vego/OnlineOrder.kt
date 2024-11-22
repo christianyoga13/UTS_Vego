@@ -86,13 +86,19 @@ fun OnlineOrderScreen(navController: NavController) {
             ReusableRestoSection(
                 title = "24 Hours",
                 items = getRestoItems(),
-                onSeeAllClick = { /* Handle See All */ }
+                onSeeAllClick = { /* Handle See All */ },
+                onCardClick = { restoItem ->
+                    navController.navigate("restoDetail/${restoItem.name}")
+                }
             )
             Spacer(modifier = Modifier.height(16.dp))
             ReusableRestoSection(
                 title = "Fast Serve",
                 items = getFastServeItems(),
-                onSeeAllClick = { /* Handle See All */ }
+                onSeeAllClick = { /* Handle See All */ },
+                onCardClick = { restoItem ->
+                    navController.navigate("restoDetail/${restoItem.name}")
+                }
             )
         }
     }
@@ -362,16 +368,16 @@ data class OrderItem(
 
 @Composable
 fun ReusableRestoSection(
-    title: String, // Judul section
-    items: List<RestoItem>, // Data untuk kartu
-    onSeeAllClick: () -> Unit // Aksi ketika tombol "See All" diklik
+    title: String,
+    items: List<RestoItem>,
+    onSeeAllClick: () -> Unit,
+    onCardClick: (RestoItem) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // Header "24 Hours" dan tombol "See All"
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -382,154 +388,41 @@ fun ReusableRestoSection(
                 style = MaterialTheme.typography.h6,
                 fontWeight = FontWeight.Bold
             )
-            TextButton(
-                onClick = onSeeAllClick,
-                modifier = Modifier.background(
-                    color = Color(0xFFECECEC),
-                    shape = RoundedCornerShape(12.dp)
-                )
-            ) {
-                Text(
-                    text = "See All",
-                    color = Color.Green,
-                    style = MaterialTheme.typography.body2
-                )
+            TextButton(onClick = onSeeAllClick) {
+                Text(text = "See All", color = Color.Green)
             }
         }
-
-        // Carousel Horizontal
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(items) { item ->
-                RestoCard(restoItem = item)
+                RestoCard(restoItem = item, onClick = { onCardClick(item) })
             }
         }
     }
 }
 
 @Composable
-fun RestoCard(restoItem: RestoItem) {
+fun RestoCard(restoItem: RestoItem, onClick: () -> Unit) {
     Card(
-        shape = RoundedCornerShape(8.dp),
-        elevation = 4.dp,
         modifier = Modifier
             .width(180.dp)
-            .wrapContentHeight()
+            .clickable { onClick() }
     ) {
-        Column(
-            modifier = Modifier.padding(8.dp)
-        ) {
+        Column {
             Image(
                 painter = painterResource(id = restoItem.imageRes),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .height(100.dp)
             )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
             Text(
                 text = restoItem.name,
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                modifier = Modifier.padding(8.dp),
+                maxLines = 1
             )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // Rating dan jarak
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = null,
-                    tint = Color.Yellow,
-                    modifier = Modifier.size(16.dp)
-                )
-                Text(
-                    text = restoItem.rating.toString(),
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.padding(start = 4.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "${restoItem.time} • ${restoItem.distance}",
-                    style = MaterialTheme.typography.body2,
-                    color = Color.Gray
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Kategori Label
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                restoItem.tags.forEach { tag ->
-                    Text(
-                        text = tag,
-                        style = MaterialTheme.typography.caption,
-                        color = Color.White,
-                        modifier = Modifier
-                            .background(
-                                color = Color.Green,
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun MultiSectionScreen(navController: NavController) {
-    Scaffold(
-        topBar = {
-            TopBarWithSearchBar(navController)
-        }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            item {
-                ReusableRestoSection(
-                    title = "24 Hours",
-                    items = getRestoItems(),
-                    onSeeAllClick = { /* Handle See All for 24 Hours */ }
-                )
-            }
-            item {
-                ReusableRestoSection(
-                    title = "Fast Serve",
-                    items = getFastServeItems(),
-                    onSeeAllClick = { /* Handle See All for Fast Serve */ }
-                )
-            }
-            item {
-                ReusableRestoSection(
-                    title = "Big Discount",
-                    items = getBigDiscountItems(),
-                    onSeeAllClick = { /* Handle See All for Big Discount */ }
-                )
-            }
-            item {
-                ReusableRestoSection(
-                    title = "Best Seller",
-                    items = getBestSellerItems(),
-                    onSeeAllClick = { /* Handle See All for Best Seller */ }
-                )
-            }
         }
     }
 }
