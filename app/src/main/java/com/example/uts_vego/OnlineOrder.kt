@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -81,7 +82,18 @@ fun OnlineOrderScreen(navController: NavController) {
             ButtonGroup()
             Spacer(modifier = Modifier.height(24.dp))
             OrderNowCarousel()
-            RestoSection()
+            Spacer(modifier = Modifier.height(24.dp))
+            ReusableRestoSection(
+                title = "24 Hours",
+                items = getRestoItems(),
+                onSeeAllClick = { /* Handle See All */ }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            ReusableRestoSection(
+                title = "Fast Serve",
+                items = getFastServeItems(),
+                onSeeAllClick = { /* Handle See All */ }
+            )
         }
     }
 }
@@ -290,7 +302,7 @@ fun OrderNowCarousel() {
             HorizontalPager(
                 count = getOrderItems().size, // Jumlah item
                 state = pagerState,
-                contentPadding = PaddingValues(horizontal = 32.dp), // Padding untuk snap
+                contentPadding = PaddingValues(horizontal = 8.dp), // Padding untuk snap
             ) { page ->
                 OrderCard(orderItem = getOrderItems()[page])
             }
@@ -315,7 +327,7 @@ fun OrderCard(orderItem: OrderItem) {
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(140.dp)
+                    .height(150.dp)
             )
             // Teks di bawah
             Column(modifier = Modifier.padding(8.dp)) {
@@ -349,7 +361,11 @@ data class OrderItem(
 )
 
 @Composable
-fun RestoSection() {
+fun ReusableRestoSection(
+    title: String, // Judul section
+    items: List<RestoItem>, // Data untuk kartu
+    onSeeAllClick: () -> Unit // Aksi ketika tombol "See All" diklik
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -362,12 +378,12 @@ fun RestoSection() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "24 Hours",
+                text = title,
                 style = MaterialTheme.typography.h6,
                 fontWeight = FontWeight.Bold
             )
             TextButton(
-                onClick = { /* Aksi See All */ },
+                onClick = onSeeAllClick,
                 modifier = Modifier.background(
                     color = Color(0xFFECECEC),
                     shape = RoundedCornerShape(12.dp)
@@ -386,7 +402,7 @@ fun RestoSection() {
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(getRestoItems()) { item ->
+            items(items) { item ->
                 RestoCard(restoItem = item)
             }
         }
@@ -475,7 +491,51 @@ fun RestoCard(restoItem: RestoItem) {
     }
 }
 
-// Data Model
+@Composable
+fun MultiSectionScreen(navController: NavController) {
+    Scaffold(
+        topBar = {
+            TopBarWithSearchBar(navController)
+        }
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                ReusableRestoSection(
+                    title = "24 Hours",
+                    items = getRestoItems(),
+                    onSeeAllClick = { /* Handle See All for 24 Hours */ }
+                )
+            }
+            item {
+                ReusableRestoSection(
+                    title = "Fast Serve",
+                    items = getFastServeItems(),
+                    onSeeAllClick = { /* Handle See All for Fast Serve */ }
+                )
+            }
+            item {
+                ReusableRestoSection(
+                    title = "Big Discount",
+                    items = getBigDiscountItems(),
+                    onSeeAllClick = { /* Handle See All for Big Discount */ }
+                )
+            }
+            item {
+                ReusableRestoSection(
+                    title = "Best Seller",
+                    items = getBestSellerItems(),
+                    onSeeAllClick = { /* Handle See All for Best Seller */ }
+                )
+            }
+        }
+    }
+}
+
 data class RestoItem(
     val imageRes: Int,
     val name: String,
@@ -485,7 +545,69 @@ data class RestoItem(
     val tags: List<String>
 )
 
-// Mock Data
+fun getFastServeItems(): List<RestoItem> {
+    return listOf(
+        RestoItem(
+            imageRes = R.drawable.vegan_food,
+            name = "Vegetarian Mix",
+            rating = 4.8,
+            time = "15 MINS",
+            distance = "0.8 Km",
+            tags = listOf("Healthy", "Cheap")
+        ),
+        RestoItem(
+            imageRes = R.drawable.resto_image,
+            name = "Asian Delight",
+            rating = 4.7,
+            time = "10 MINS",
+            distance = "1.0 Km",
+            tags = listOf("Quick Serve", "Popular")
+        )
+    )
+}
+
+fun getBigDiscountItems(): List<RestoItem> {
+    return listOf(
+        RestoItem(
+            imageRes = R.drawable.vegan_smoothie,
+            name = "Losing Hut",
+            rating = 4.5,
+            time = "30 MINS",
+            distance = "2.0 Km",
+            tags = listOf("Cheap", "Discount")
+        ),
+        RestoItem(
+            imageRes = R.drawable.vegan_food,
+            name = "Festival",
+            rating = 4.3,
+            time = "25 MINS",
+            distance = "1.5 Km",
+            tags = listOf("Deal", "Limited")
+        )
+    )
+}
+
+fun getBestSellerItems(): List<RestoItem> {
+    return listOf(
+        RestoItem(
+            imageRes = R.drawable.vegan_food,
+            name = "Resto Salad Sayur",
+            rating = 4.9,
+            time = "20 MINS",
+            distance = "1.2 Km",
+            tags = listOf("Best Resto", "Top Rated")
+        ),
+        RestoItem(
+            imageRes = R.drawable.resto_image,
+            name = "RM. Vegan Indo",
+            rating = 4.8,
+            time = "15 MINS",
+            distance = "1.0 Km",
+            tags = listOf("Recommended", "Vegan")
+        )
+    )
+}
+
 fun getRestoItems(): List<RestoItem> {
     return listOf(
         RestoItem(
@@ -514,7 +636,6 @@ fun getRestoItems(): List<RestoItem> {
         )
     )
 }
-
 
 @Preview(showBackground = true)
 @Composable
