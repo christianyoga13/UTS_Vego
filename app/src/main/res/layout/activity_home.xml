@@ -78,7 +78,7 @@
 
         <GridLayout
             android:id="@+id/gridButtons"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:columnCount="2"
@@ -89,6 +89,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
+            <!-- Button 1 -->
             <LinearLayout
                 android:id="@+id/button1"
                 android:layout_width="0dp"
@@ -97,22 +98,24 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="16dp"
-                android:background="?attr/selectableItemBackground">
+                android:background="@drawable/rounded_button_background"
+                android:elevation="4dp">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/trash" />
+                    android:src="@drawable/motorcycle" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Button 1"
+                    android:text="Online Order"
                     android:textSize="16sp"
                     android:textColor="@android:color/black"
                     android:layout_marginTop="8dp" />
             </LinearLayout>
 
+            <!-- Button 2 -->
             <LinearLayout
                 android:id="@+id/button2"
                 android:layout_width="0dp"
@@ -121,22 +124,24 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="16dp"
-                android:background="?attr/selectableItemBackground">
+                android:background="@drawable/rounded_button_background"
+                android:elevation="4dp">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/logo" />
+                    android:src="@drawable/restaurant_logo" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Button 2"
+                    android:text="Restaurant Near You"
                     android:textSize="16sp"
                     android:textColor="@android:color/black"
                     android:layout_marginTop="8dp" />
             </LinearLayout>
 
+            <!-- Button 3 -->
             <LinearLayout
                 android:id="@+id/button3"
                 android:layout_width="0dp"
@@ -145,22 +150,24 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="16dp"
-                android:background="?attr/selectableItemBackground">
+                android:background="@drawable/rounded_button_background"
+                android:elevation="4dp">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/bicycle" />
+                    android:src="@drawable/recipe" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Button 3"
+                    android:text="Recipe Book"
                     android:textSize="16sp"
                     android:textColor="@android:color/black"
                     android:layout_marginTop="8dp" />
             </LinearLayout>
 
+            <!-- Button 4 -->
             <LinearLayout
                 android:id="@+id/button4"
                 android:layout_width="0dp"
@@ -169,23 +176,25 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="16dp"
-                android:background="?attr/selectableItemBackground">
+                android:background="@drawable/rounded_button_background"
+                android:elevation="4dp">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/cart" />
+                    android:src="@drawable/forum_chat" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Button 4"
+                    android:text="Forum Chat"
                     android:textSize="16sp"
                     android:textColor="@android:color/black"
                     android:layout_marginTop="8dp" />
             </LinearLayout>
 
         </GridLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

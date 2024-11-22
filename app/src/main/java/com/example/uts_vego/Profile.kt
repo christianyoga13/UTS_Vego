@@ -2,239 +2,191 @@ package com.example.uts_vego
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.textfield.TextInputEditText
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import java.text.SimpleDateFormat
-import java.util.*
 
-class Profile : AppCompatActivity() {
-
-    // Firebase instances
-    private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
-
-    // UI elements
-    private lateinit var toolbar: Toolbar
-    private lateinit var profileImageView: ImageView
-    private lateinit var buttonEditImage: Button
-    private lateinit var editTextName: TextInputEditText
-    private lateinit var editTextEmail: TextInputEditText
-    private lateinit var editTextDOB: TextInputEditText
-    private lateinit var editTextPOB: TextInputEditText
-    private lateinit var buttonSave: Button
-    private lateinit var bottomNavigationView: BottomNavigationView
-
-    // Calendar instance for DOB
-    private val calendar = Calendar.getInstance()
-
+class Profile : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_profile)
-
-        // Initialize Firebase
-        auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
-
-        // Initialize UI elements
-        toolbar = findViewById(R.id.toolbar_profile)
-        profileImageView = findViewById(R.id.profileImageView)
-        buttonEditImage = findViewById(R.id.buttonEditImage)
-        editTextName = findViewById(R.id.editTextName)
-        editTextEmail = findViewById(R.id.editTextEmail)
-        editTextDOB = findViewById(R.id.editTextDOB)
-        editTextPOB = findViewById(R.id.editTextPOB)
-        buttonSave = findViewById(R.id.buttonSave)
-        bottomNavigationView = findViewById(R.id.bottomNavigationView_profile)
-
-        // Set up the toolbar
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true) // Show back button
-        supportActionBar?.title = "Profile"
-
-        // Load user data
-        loadUserProfile()
-
-        // Handle DOB field click to show DatePicker
-        editTextDOB.setOnClickListener {
-            showDatePickerDialog()
-        }
-
-        // Handle Save button click
-        buttonSave.setOnClickListener {
-            saveUserProfile()
-        }
-
-        // Optional: Handle Edit Image button click
-        buttonEditImage.setOnClickListener {
-            // Implement image selection and upload functionality
-            Toast.makeText(this, "Edit Image Clicked", Toast.LENGTH_SHORT).show()
-        }
-
-        // Set up BottomNavigationView
-        setupBottomNavigationView()
-    }
-
-    // Handle the back button in the toolbar
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
-    }
-
-    // Function to load user profile from Firestore
-    private fun loadUserProfile() {
-        val user = auth.currentUser
-        if (user != null) {
-            val uid = user.uid
-            firestore.collection("users").document(uid)
-                .get()
-                .addOnSuccessListener { document ->
-                    if (document.exists()) {
-                        // Assuming Firestore fields: name, email, dateOfBirth, placeOfBirth
-                        editTextName.setText(document.getString("name") ?: "")
-                        editTextEmail.setText(document.getString("email") ?: user.email)
-                        editTextDOB.setText(document.getString("dateOfBirth") ?: "")
-                        editTextPOB.setText(document.getString("placeOfBirth") ?: "")
-                        // Load profile image if stored (Optional)
-                        // val profileImageUrl = document.getString("profileImageUrl")
-                        // if (profileImageUrl != null) {
-                        //     // Use an image loading library like Glide or Picasso to load the image
-                        //     Glide.with(this).load(profileImageUrl).into(profileImageView)
-                        // }
-                    } else {
-                        Toast.makeText(this, "No profile found.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Toast.makeText(this, "Error loading profile: ${exception.message}", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(this, "User not logged in.", Toast.LENGTH_SHORT).show()
-            // Redirect to LoginActivity if needed
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+        setContent {
+            val navController = rememberNavController()
+            ProfileNavigation(navController = navController)
         }
     }
+}
 
-    // Function to save user profile to Firestore
-    private fun saveUserProfile() {
-        val user = auth.currentUser
-        if (user != null) {
-            val uid = user.uid
+@Composable
+fun ProfileNavigation(navController: NavController) {
+    val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
-            // Retrieve input data
-            val name = editTextName.text.toString().trim()
-            val email = editTextEmail.text.toString().trim()
-            val dateOfBirth = editTextDOB.text.toString().trim()
-            val placeOfBirth = editTextPOB.text.toString().trim()
-
-            // Validate inputs
-            if (name.isEmpty()) {
-                editTextName.error = "Name is required"
-                editTextName.requestFocus()
-                return
+    Scaffold(
+        bottomBar = {
+            if(currentRoute in listOf("profile_home")) {
+                BottomNavigationBar(navController)
             }
+        }
+    ) { paddingValues ->
+        NavHost(
+            navController = navController,
+            startDestination = "profile_home",
+            modifier = Modifier.padding(paddingValues)
+        ) {
+            // Define your main profile routes
+            composable("profile_home") { ProfileScreen(navController) }
+            composable("yourProfile") { YourProfileScreen(navController) } // No bottom nav here
+//        composable("address") { AddressScreen(navController) }
+//        composable("paymentMethod") { PaymentMethodScreen(navController) }
+//        composable("order") { OrderScreen(navController) }
+//        composable("notification") { NotificationScreen(navController) }
+//        composable("setting") { SettingScreen(navController) }
+//        composable("helpCenter") { HelpCenterScreen(navController) }
+        }
+    }
+}
 
-            if (email.isEmpty()) {
-                editTextEmail.error = "Email is required"
-                editTextEmail.requestFocus()
-                return
-            }
-
-            // Update Firebase Authentication email if changed
-            if (email != user.email) {
-                user.updateEmail(email)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(this, "Email updated successfully.", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(this, "Failed to update email: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-            }
-
-            // Create a user profile map
-            val userProfile = hashMapOf(
-                "name" to name,
-                "email" to email,
-                "dateOfBirth" to dateOfBirth,
-                "placeOfBirth" to placeOfBirth
-                // Add more fields if needed
+@Composable
+fun ProfileScreen(navController: NavController) {
+    val context = LocalContext.current
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Profile", color = Color.White, fontWeight = FontWeight.Bold) },
+                backgroundColor = Color(0xFFFFA500)
             )
-
-            // Save to Firestore
-            firestore.collection("users").document(uid)
-                .set(userProfile)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Profile updated successfully.", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener { exception ->
-                    Toast.makeText(this, "Error updating profile: ${exception.message}", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(this, "User not logged in.", Toast.LENGTH_SHORT).show()
-            // Redirect to LoginActivity if needed
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
         }
-    }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
+                            .background(Color.Gray),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "P",
+                            color = Color.White,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
 
-    // Function to show DatePicker dialog
-    private fun showDatePickerDialog() {
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
+                    Spacer(modifier = Modifier.width(16.dp))
 
-        val datePicker = android.app.DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-            // Update Calendar instance
-            calendar.set(Calendar.YEAR, selectedYear)
-            calendar.set(Calendar.MONTH, selectedMonth)
-            calendar.set(Calendar.DAY_OF_MONTH, selectedDay)
+                    Column {
+                        Text(
+                            text = "Christian Yoga",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Rp 100,000",
+                            fontSize = 16.sp,
+                            color = Color.Black
+                        )
+                    }
 
-            // Format and set the date to EditText
-            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-            editTextDOB.setText(sdf.format(calendar.time))
-        }, year, month, day)
+                    Spacer(modifier = Modifier.weight(1f))
 
-        datePicker.show()
-    }
-
-    // Function to set up BottomNavigationView
-    private fun setupBottomNavigationView() {
-        bottomNavigationView.setOnItemSelectedListener { item ->
-            when(item.itemId){
-                R.id.menu_home -> {
-                    // Jika sudah di Profile, buka HomeScreen
-                    val intent = Intent(this, HomeScreen::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    startActivity(intent)
-                    true
+                    IconButton(onClick = {
+                        navController.navigate("yourProfile")
+                    }) {
+                        Icon(Icons.Filled.Edit, contentDescription = "Edit Profile")
+                    }
                 }
-                R.id.menu_payment -> {
-                    // Navigasi ke Payment Activity (implementasikan jika ada)
-                    Toast.makeText(this, "Payment clicked", Toast.LENGTH_SHORT).show()
-                    true
+            }
+
+            // Menu Section
+            Column(modifier = Modifier.fillMaxWidth()) {
+                ProfileMenuItem("Your Profile") {
+                    navController.navigate("yourProfile")
                 }
-                R.id.menu_promo -> {
-                    // Navigasi ke Promo Activity (implementasikan jika ada)
-                    Toast.makeText(this, "Promo clicked", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                R.id.menu_profile -> {
-                    // Sudah di Profile, lakukan sesuatu jika diperlukan
-                    true
-                }
-                else -> false
+                // Tambahkan menu lain di sini
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Button(
+                onClick = {
+                    FirebaseAuth.getInstance().signOut() // Proses logout Firebase
+                    val intent = Intent(context, LoginActivity::class.java) // Pindah ke LoginActivity
+                    context.startActivity(intent)
+                    (context as? MainActivity)?.finish()
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
+            ) {
+                Text("Log out", color = Color.White)
             }
         }
+    }
+}
 
-        // Set selected item
-        bottomNavigationView.selectedItemId = R.id.menu_profile
+@Composable
+fun ProfileMenuItem(text: String, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = 12.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = text,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.Black,
+                modifier = Modifier.weight(1f)
+            )
+            Icon(
+                imageVector = Icons.Default.ArrowForward,
+                contentDescription = "Navigate to $text",
+                tint = Color.Gray
+            )
+        }
+        Divider(modifier = Modifier.padding(top = 12.dp), color = Color.Gray)
     }
 }
