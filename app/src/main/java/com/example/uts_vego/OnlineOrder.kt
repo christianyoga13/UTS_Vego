@@ -415,13 +415,12 @@ fun RestoCard(restoItem: RestoItem) {
         shape = RoundedCornerShape(8.dp),
         elevation = 4.dp,
         modifier = Modifier
-            .width(180.dp) // Lebar kartu
-            .wrapContentHeight() // Tinggi fleksibel
+            .width(180.dp)
+            .wrapContentHeight()
     ) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
-            // Gambar resto
             Image(
                 painter = painterResource(id = restoItem.imageRes),
                 contentDescription = null,
@@ -433,7 +432,6 @@ fun RestoCard(restoItem: RestoItem) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Nama resto
             Text(
                 text = restoItem.name,
                 style = MaterialTheme.typography.subtitle1,
